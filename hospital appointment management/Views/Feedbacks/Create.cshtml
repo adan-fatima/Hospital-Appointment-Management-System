@@ -1,0 +1,123 @@
+﻿@model hospital_appointment_management.Models.Feedback
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card feedback-card shadow-lg">
+
+                <div class="card-header bg-white border-0 pt-4 pb-0 text-center">
+                    <div class="mb-3 d-inline-block p-3 bg-info bg-opacity-10 rounded-circle">
+                        <i class="bi bi-chat-heart text-info fs-2"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark">How was your visit?</h3>
+                    <p class="text-muted">Your feedback helps @ViewBag.DoctorName provide better care.</p>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="Create" method="post">
+                        <input type="hidden" asp-for="AppointmentId" />
+                        <input type="hidden" asp-for="DoctorId" />
+
+                        <div class="mb-4">
+                            <label class="form-label small text-uppercase letter-spacing-1">Patient Name</label>
+                            <input class="form-control read-only-box py-2" value="@User.Identity.Name" readonly />
+                        </div>
+
+                        <div class="mb-5 text-center">
+                            <label class="form-label d-block mb-3">Rate your experience</label>
+                            <div class="rating-wrapper">
+                                @for (int i = 5; i >= 1; i--)
+                                {
+                                    @* The input must come BEFORE the label for the CSS ~ selector to work *@
+                                  <input type="radio"
+                                           asp-for="StarRating"
+                                           id="star-@i"
+                                           value="@i"
+                                           class="star-input"
+                                           required />
+                                    <label for="star-@i" class="star-label" title="@i Stars">
+                                        <i class="bi bi-star-fill"></i>
+                                    </label>
+                                }
+                            </div>
+                            <span asp-validation-for="StarRating" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Comments" class="form-label">Tell us more</label>
+                            <textarea asp-for="Comments"
+                                      class="form-control textarea-modern"
+                                      rows="4"
+                                      placeholder="Share your experience with the staff, facility, or consultation..."></textarea>
+                            <span asp-validation-for="Comments" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold py-3 shadow-sm">
+                                Submit Feedback <i class="bi bi-send-fill ms-2"></i>
+                            </button>
+                            <a href="javascript:history.back()" class="btn btn-link text-muted mt-2">Maybe later</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+        document.querySelectorAll('.star-label').forEach(label => {
+        label.addEventListener('click', function() {
+            const targetId = this.getAttribute('for');
+            const input = document.getElementById(targetId);
+            if (input) {
+                input.checked = true;
+                // Trigger change for any validation scripts
+                input.dispatchEvent(new Event('change'));
+            }
+        });
+    });
+</script>
+@* @model hospital_appointment_management.Models.Feedback
+
+<div class="container mt-5">
+    <div class="card shadow-sm col-md-6 mx-auto">
+        <div class="card-header bg-info text-white">
+            <h4>Rate your visit with @ViewBag.DoctorName</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <input type="hidden" asp-for="AppointmentId" />
+                <input type="hidden" asp-for="DoctorId" />
+                <div class="mb-3">
+                    <label class="form-label">Patient</label>
+                    <input class="form-control" value="@User.Identity.Name" readonly />
+                </div>
+
+                <div class="mb-3 text-center">
+                    <label class="form-label d-block">Your Rating</label>
+
+                    <div class="star-rating">
+                        @for (int i = 5; i >= 1; i--)
+                        {
+                            <input type="radio"
+                                   asp-for="StarRating"
+                                   id="star@i"
+                                   value="@i" />
+
+                            <label for="star@i">★</label>
+                        }
+                    </div>
+                </div>
+
+
+
+                <div class="mb-3">
+                    <label asp-for="Comments" class="form-label">Tell us about your experience</label>
+                    <textarea asp-for="Comments" class="form-control" rows="4" placeholder="How was the consultation?"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Submit Feedback</button>
+            </form>
+        </div>
+    </div>
+</div>*@

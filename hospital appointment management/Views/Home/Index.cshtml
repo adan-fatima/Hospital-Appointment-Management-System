@@ -1,0 +1,249 @@
+﻿
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<section class="hero-section text-center mb-5">
+    <div class="container py-lg-5">
+        <span class="badge rounded-pill bg-light text-primary px-3 py-2 mb-4 fw-bold">TRUSTED BY 10,000+ PATIENTS</span>
+        <h1 class="display-3 fw-bold mb-4">Your Health, <span class="text-info">Our Priority</span></h1>
+        <p class="lead mb-5 opacity-75 mx-auto" style="max-width: 700px;">
+            Experience healthcare simplified. Book appointments with top-rated specialists in just a few clicks.
+        </p>
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+            <a asp-controller="Doctors" asp-action="Index" class="btn btn-light btn-lg px-5 py-3 fw-bold shadow-lg rounded-pill text-primary">
+                <i class="fas fa-search me-2"></i>Find a Doctor Now
+            </a>
+        </div>
+        <div class="mt-5 pt-3">
+            <small class="text-white-50">
+                <i class="fas fa-check-circle me-1"></i> Instant Confirmation &nbsp;
+                <i class="fas fa-check-circle me-1"></i> Verified Specialists &nbsp;
+                <i class="fas fa-check-circle me-1"></i> 24/7 Access
+            </small>
+        </div>
+    </div>
+</section>
+
+<section class="container mb-5 py-5">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="p-5 feature-card h-100 text-center">
+                <div class="feature-icon mb-4 bg-primary bg-opacity-10 p-4 rounded-circle d-inline-block">
+                    <i class="fas fa-user-md text-primary fa-2x"></i>
+                </div>
+                <h3 class="h4 fw-bold mb-3">Expert Doctors</h3>
+                <p class="text-muted mb-4">Access to 500+ certified specialists with verified patient credentials.</p>
+                <a href="#" class="btn btn-link text-primary fw-bold text-decoration-none p-0">View Specialties <i class="fas fa-arrow-right ms-2"></i></a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-5 feature-card h-100 text-center border-top border-info border-4">
+                <div class="feature-icon mb-4 bg-info bg-opacity-10 p-4 rounded-circle d-inline-block">
+                    <i class="fas fa-calendar-check text-info fa-2x"></i>
+                </div>
+                <h3 class="h4 fw-bold mb-3">Easy Booking</h3>
+                <p class="text-muted mb-4">Real-time availability and instant confirmation with SMS reminders.</p>
+                <a href="#" class="btn btn-link text-info fw-bold text-decoration-none p-0">How It Works <i class="fas fa-arrow-right ms-2"></i></a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-5 feature-card h-100 text-center">
+                <div class="feature-icon mb-4 bg-success bg-opacity-10 p-4 rounded-circle d-inline-block">
+                    <i class="fas fa-hospital text-success fa-2x"></i>
+                </div>
+                <h3 class="h4 fw-bold mb-3">24/7 Support</h3>
+                <p class="text-muted mb-4">Our dedicated team is always here to help you manage your health.</p>
+                <a href="#" class="btn btn-link text-success fw-bold text-decoration-none p-0">Get Support <i class="fas fa-arrow-right ms-2"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-white py-5 mb-5 border-top border-bottom">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-6 col-md-3">
+                <div class="stat-box">
+                    <h2 class="text-primary fw-bold display-5 mb-1">500+</h2>
+                    <span class="text-muted text-uppercase small letter-spacing-1">Doctors</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-box">
+                    <h2 class="text-primary fw-bold display-5 mb-1">50+</h2>
+                    <span class="text-muted text-uppercase small">Specialties</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-box">
+                    <h2 class="text-primary fw-bold display-5 mb-1">10K+</h2>
+                    <span class="text-muted text-uppercase small">Patients</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-box">
+                    <h2 class="text-primary fw-bold display-5 mb-1">24/7</h2>
+                    <span class="text-muted text-uppercase small">Support</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container py-5 mb-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Experience Healthcare in 4 Steps</h2>
+        <div class="mx-auto bg-primary rounded" style="height: 4px; width: 60px;"></div>
+    </div>
+    <div class="row g-4">
+        @{
+            var steps = new[] {
+                new { n = "1", t = "Search Doctors", d = "Find specialists by location or specialty." },
+                new { n = "2", t = "Book Slot", d = "Select a date and time that fits your schedule." },
+                new { n = "3", t = "Confirmation", d = "Get instant SMS and Email notifications." },
+                new { n = "4", t = "Visit Doctor", d = "Attend your appointment with digital records." }
+                };
+        }
+        @foreach (var step in steps)
+        {
+            <div class="col-lg-3 col-md-6 text-center step-item">
+                <div class="step-number">@step.n</div>
+                <h4 class="fw-bold h5">@step.t</h4>
+                <p class="text-muted small">@step.d</p>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="container mb-5" id="contact">
+    <div class="bg-light p-5 rounded-3xl shadow-sm border">
+        <div class="row align-items-center">
+            <div class="col-lg-5 mb-4 mb-lg-0">
+                <h2 class="fw-bold mb-3">Get in Touch</h2>
+                <p class="text-muted mb-4">Have questions about our services? Our team is available round the clock.</p>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-white p-3 rounded-circle shadow-sm me-3 text-primary"><i class="fas fa-phone"></i></div>
+                    <div><h6 class="mb-0">Call Us</h6><strong>+1 (123) 456-7890</strong></div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-white p-3 rounded-circle shadow-sm me-3 text-primary"><i class="fas fa-envelope"></i></div>
+                    <div><h6 class="mb-0">Email Us</h6><strong>adanf1947@gmail.com</strong></div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                    <div class="card-body p-4 p-md-5">
+                        <form>
+                            <div class="row g-3">
+                                <div class="col-md-6"><input type="text" class="form-control py-3" placeholder="Your Name"></div>
+                                <div class="col-md-6"><input type="email" class="form-control py-3" placeholder="Your Email"></div>
+                                <div class="col-12"><textarea class="form-control py-3" rows="3" placeholder="How can we help?"></textarea></div>
+                                <div class="col-12"><button class="btn btn-primary w-100 py-3 fw-bold">Send Message</button></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mb-5">
+    <div class="emergency-banner p-4 shadow-sm">
+        <div class="row align-items-center">
+            <div class="col-md-9 mb-3 mb-md-0">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-exclamation-triangle fs-3 text-warning me-3"></i>
+                    <div>
+                        <h5 class="mb-1 fw-bold">Medical Emergency?</h5>
+                        <p class="mb-0 opacity-75 small">Call 911 or visit the nearest emergency room immediately. This platform is not for life-threatening situations.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 text-md-end">
+                <a href="#" class="btn btn-dark px-4 rounded-pill">View ER Guide</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+                        <style>
+    :root {
+        --medical-blue: #0056b3;
+        --medical-gradient: linear-gradient(135deg, #0056b3 0%, #00a8cc 100%);
+        --soft-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        --hover-shadow: 0 20px 40px rgba(0, 86, 179, 0.15);
+    }
+
+    /* Hero Section Enhancement */
+    .hero-section {
+        background: var(--medical-gradient);
+        padding: 120px 0 100px;
+        border-radius: 0 0 50px 50px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .hero-section::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+    /* Card & Feature Styling */
+    .feature-card {
+        border: none !important;
+        background: white;
+        border-radius: 24px !important;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: var(--soft-shadow);
+    }
+
+        .feature-card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--hover-shadow);
+        }
+
+    /* Dynamic Stats */
+    .stat-box {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        border-bottom: 4px solid var(--medical-blue);
+    }
+
+    /* Stepper UI */
+    .step-item {
+        position: relative;
+    }
+
+    .step-number {
+        width: 60px;
+        height: 60px;
+        background: var(--medical-blue);
+        color: white;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 20px;
+        margin: 0 auto 20px;
+        box-shadow: 0 8px 15px rgba(0, 86, 179, 0.2);
+    }
+
+    /* Emergency Banner */
+    .emergency-banner {
+        background: #fff3cd;
+        border-left: 5px solid #ffc107;
+        border-radius: 12px;
+    }
+
+                        </style>

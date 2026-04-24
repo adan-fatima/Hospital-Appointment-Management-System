@@ -1,0 +1,221 @@
+﻿@{
+    var controller = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["Action"]?.ToString();
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+@using Microsoft.AspNetCore.Identity
+@using hospital_appointment_management.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - hospital_appointment_management</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/hospital_appointment_management.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    @RenderSection("Styles", required: false)
+
+</head>
+<body>
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-dark bg-gradient-primary box-shadow mb-3">
+                <div class="container">
+                    <a class="navbar-brand font-weight-bold" style="font-size: 1.5rem;">
+                        <i class="fa-solid fa-heart-pulse text-light"></i> Health<span class="text-warning">Book</span>
+                    </a>
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                   @*   <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1 ml-4">
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="Home" asp-action="Index">
+                                    <i class="fa-solid fa-house"></i> Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="Doctors" asp-action="Index">
+                                    <i class="fa-solid fa-user-doctor"></i> Find a Doctor
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="Appointments" asp-action="Index">
+                                    <i class="fa-solid fa-calendar-check"></i> My Appointments
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="DoctorPanel" asp-action="MySchedule">
+                                    <i class="fa-solid fa-clipboard-list"></i> Doctor Dashboard
+                                </a>
+                            </li>
+                        </ul>
+                        <ul>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Admin Dashboard</a>
+                            </li>
+                        }
+                        </ul>
+                        <ul class="navbar-nav">
+                            <li class="nav-item">*@
+                                @*  <a class="btn btn-outline-light btn-sm rounded-pill px-4" href="#">*@
+                             @*   <partial name="_LoginPartial" /> *@ @* </a>*@
+                         @*  
+                            </li>
+                        </ul>
+                    </div> *@ 
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 ml-4">
+                      @*   <li class="nav-item">
+                            <a class="nav-link @(controller == "Home" && action == "Index" ? "text-warning fw-bold" : "text-light")" asp-controller="Home" asp-action="Index">
+                                <i class="fa-solid fa-house"></i> Home
+                            </a>
+                        </li> *@
+                        @if (!User.Identity.IsAuthenticated || User.IsInRole("Patient"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(controller == "Home" && action == "Index" ? "text-warning fw-bold" : "text-light")"
+                                   asp-controller="Home" asp-action="Index">
+                                    <i class="fa-solid fa-house"></i> Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(controller == "Doctors" ? "text-warning fw-bold" : "text-light")" asp-controller="Doctors" asp-action="Index">
+                                    <i class="fa-solid fa-user-doctor"></i> Find a Doctor
+                                </a>
+                            </li>
+                        }
+                       
+
+
+                        @* Only show these links if a user is actually logged in *@
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (User.IsInRole("Patient"))
+                            {
+                               @*  <li class="nav-item">
+                                    <a class="nav-link @(controller == "Home" && action == "Index" ? "text-warning fw-bold" : "text-light")" asp-controller="Home" asp-action="Index">
+                                        <i class="fa-solid fa-house"></i> Home
+                                    </a>
+                                </li> *@
+                               @*  <li class="nav-item">
+                                    <a class="nav-link @(controller == "Doctors" ? "text-warning fw-bold" : "text-light")" asp-controller="Doctors" asp-action="Index">
+                                        <i class="fa-solid fa-user-doctor"></i> Find a Doctor
+                                    </a>
+                                </li> *@
+                                <li class="nav-item">
+                                    <a class="nav-link @(action == "Dashboard" ? "text-warning fw-bold" : "text-light")" asp-controller="Appointments" asp-action="Dashboard">
+                                        <i class="fa-solid fa-calendar-check"></i> My Appointments
+                                    </a>
+                                </li>
+                                @* <div class="d-flex align-items-center ms-auto"> *@
+                                    <li class="nav-item ms-auto">
+                                    <div class="position-relative me-3">
+                                    <input type="text"
+                                           id="doctorSearch"
+                                           class="form-control form-control-sm"
+                                           placeholder="Search doctor or specialization..."
+                                           autocomplete="off" />
+
+                                    <div id="doctorSearchResults"
+                                         class="list-group position-absolute w-100 shadow"
+                                         style="z-index:1000; display:none;">
+                                    </div>
+                                    </div>
+                                    </li>
+                                @* </div> *@
+                            }
+
+                            @if (User.IsInRole("Doctor"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link @(controller == "DoctorPanel" && action == "profile" ? "text-warning fw-bold" : "text-light")" asp-controller="DoctorPanel" asp-action="profile">Profile</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(controller == "DoctorPanel" && action == "Index" ? "text-warning fw-bold" : "text-light fw-bold")" asp-controller="DoctorPanel" asp-action="Index">👨‍⚕️ Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(controller == "DoctorPanel" && action == "Appointments" ? "text-warning fw-bold" : "text-light")" asp-controller="DoctorPanel" asp-action="Appointments">Appointments</a>
+                                </li>
+                             
+                                <li class="nav-item">
+                                    <a class="nav-link @(controller == "DoctorPanel" && action == "Availabilitiy" ? "text-warning fw-bold" : "text-light")" asp-controller="DoctorPanel" asp-action="Availability">My Availability</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-light text-decoration-none @(controller == "Admin" && action == "Index" ? "active fw-bold border-bottom" : "")"
+                                       asp-controller="Admin" asp-action="Index">
+                                        <i class="fa-solid fa-user-clock"></i> Pending Approvals
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light text-decoration-none @(controller == "Admin" && action == "ManageDoctors" ? "active fw-bold border-bottom" : "")"
+                                       asp-controller="Admin" asp-action="ManageDoctors">
+                                        <i class="fa-solid fa-users-gear"></i> Manage Doctors
+                                    </a>
+                                </li>
+                            }
+
+                           @*  @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-warning" href="#" id="adminMenu" data-bs-toggle="dropdown">
+                                        Admin Menu
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" asp-controller="Admin" asp-action="Index">Pending Approvals</a>
+                                        <a class="dropdown-item" asp-controller="Admin" asp-action="ManageDoctors">Manage All Doctors</a>
+                                    </div>
+                                </li>
+                            } *@
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            @* The LoginPartial handles the "Login/Register" vs "Logout" buttons automatically *@
+                            <partial name="_LoginPartial" />
+                        </li>
+                    </ul>
+                </div>
+                </div>
+            </nav>
+        </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - hospital_appointment_management - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+<script src="~/js/doctor-search.js"></script>
+
+</html>

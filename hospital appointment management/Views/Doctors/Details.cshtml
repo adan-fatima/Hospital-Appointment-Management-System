@@ -1,0 +1,116 @@
+﻿
+
+
+@model hospital_appointment_management.Models.DoctorProfile
+
+<div class="container py-5">
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="sticky-doctor-card bg-white rounded-2xl shadow p-4 text-center">
+
+                <div class="profile-img-container mb-3">
+                    <img src="@(string.IsNullOrEmpty(Model.ProfileImagePath)
+                                                  ? "/images/default-doctor.jpg"
+                                                  : Model.ProfileImagePath)"
+                         alt="Doctor Profile">
+                </div>
+
+                <div class="text-center">
+                    <h2 class="h4 fw-bold mb-1">Dr. @Model.Doctor.FirstName @Model.Doctor.LastName</h2>
+                    <p class="text-primary fw-medium mb-3">@Model.Specialization</p>
+
+                    <div class="d-flex justify-content-center gap-3 mb-4">
+                        <div class="text-center px-3 border-end">
+                            <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Experience</small>
+                            <span class="fw-bold text-dark">@Model.ExperienceYears+ Years</span>
+                        </div>
+                        <div class="text-center px-3">
+                            <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Rating</small>
+                            <span class="fw-bold text-dark text-warning">
+                                <i class="bi bi-star-fill me-1"></i>4.9
+                            </span>
+                        </div>
+                    </div>
+
+                    <a asp-controller="Appointments"
+                       asp-action="Index"
+                       asp-route-doctorId="@Model.DoctorId"
+                       class="btn btn-book btn-success btn-lg w-100 rounded-3 py-3">
+                        Check Availability & Book
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+
+            <div class="bg-white rounded-2xl shadow-sm p-4 p-md-5 mb-4 border-0">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
+                        <i class="bi bi-person-lines-fill text-primary fs-4"></i>
+                    </div>
+                    <h3 class="h5 fw-bold mb-0">Professional Summary</h3>
+                </div>
+                <p class="text-secondary lh-lg mb-0" style="font-size: 1.05rem;">
+                    @Model.Bio
+                </p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm p-4 p-md-5 border-0">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-warning bg-opacity-10 p-2 rounded-3 me-3">
+                            <i class="bi bi-chat-left-heart-fill text-warning fs-4"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-0">Patient Reviews</h3>
+                    </div>
+                    <span class="badge rounded-pill bg-light text-dark border px-3">
+                        @(Model.Doctor.ReceivedFeedbacks?.Count() ?? 0) Reviews
+                    </span>
+                </div>
+
+                @if (Model.Doctor.ReceivedFeedbacks != null && Model.Doctor.ReceivedFeedbacks.Any())
+                {
+                    <div class="review-list">
+                        @foreach (var fb in Model.Doctor.ReceivedFeedbacks)
+                        {
+                            <div class="review-divider pb-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div class="text-warning">
+                                        @for (int i = 0; i < 5; i++)
+                                        {
+                                            <i class="bi bi-star@(i < fb.StarRating ? "-fill" : "")"></i>
+                                        }
+                                    </div>
+                                    <span class="text-muted small">
+                                        <i class="bi bi-calendar3 me-1"></i> @fb.CreatedDate.ToString("MMM dd, yyyy")
+                                    </span>
+                                </div>
+                                <p class="text-dark mb-0 fst-italic">"@fb.Comments"</p>
+                                <div class="mt-2 d-flex align-items-center">
+                                    <div class="bg-secondary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-2" style="width:24px; height:24px;">
+                                        <i class="bi bi-person text-secondary" style="font-size: 0.8rem;"></i>
+                                    </div>
+                                    <small class="fw-medium text-muted">Verified Patient</small>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="bi bi-chat-square-dots text-light display-1"></i>
+                        <p class="text-muted mt-3">Be the first to share your experience with Dr. @Model.Doctor.LastName</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+   

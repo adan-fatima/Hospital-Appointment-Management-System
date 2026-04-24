@@ -1,0 +1,55 @@
+﻿@model IEnumerable<hospital_appointment_management.Models.DoctorProfile>
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Available Specialists</h2>
+        <p class="text-muted">Choose a doctor and book your appointment</p>
+    </div>
+    <div class="row g-4">
+        @foreach (var profile in Model)
+        {
+            <div class="col-lg-4 col-md-6">
+                <a asp-action="Details"
+                   asp-route-id="@profile.DoctorId"
+                   class="text-decoration-none text-dark">
+                    <div class="card doctor-card h-100 border-0 shadow-sm">
+
+                        <!-- Image -->
+                        <div class="position-relative">
+                            <img src="@(string.IsNullOrEmpty(profile.ProfileImagePath)
+                                                                              ? "/images/default-doctor.jpg"
+                                                                              : profile.ProfileImagePath)"
+                             class="card-img-top doctor-img"
+                             alt="Doctor Image">
+
+                            <!-- Specialization Badge -->
+                            <span class="badge bg-primary position-absolute top-0 end-0 m-3 px-3 py-2">
+                                @profile.Specialization
+                            </span>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="card-body text-center p-4">
+                            <h5 class="fw-semibold mb-1">
+                                Dr. @profile.Doctor.FirstName @profile.Doctor.LastName
+                            </h5>
+
+                            <p class="text-muted small mb-3">
+                                Experience: @profile.ExperienceYears years
+                            </p>
+
+                            <a asp-action="Details"
+                               asp-route-id="@profile.DoctorId"
+                               class="btn btn-outline-primary w-100 fw-semibold mt-2">
+                                View Profile & Book
+                            </a>
+                        </div>
+                    </div>
+                </a>
+            </div>
+                }
+    </div>
+
+ 
+</div>
+

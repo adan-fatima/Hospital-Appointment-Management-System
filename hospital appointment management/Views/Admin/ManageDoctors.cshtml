@@ -1,0 +1,186 @@
+﻿@* @model IEnumerable<hospital_appointment_management.Models.ApplicationUser>
+
+<div class="container mt-4">
+    <h2>Manage Active Doctors</h2>
+    <hr />
+
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["StatusMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Full Name</th>
+                <th>Specialization</th>
+                <th>Email</th>
+                <th>License No.</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var doctor in Model)
+            {
+                <tr>
+                    <td>@doctor.FirstName @doctor.LastName</td>
+                    <td>@doctor.Specialization</td>
+                    <td>@doctor.Email</td>
+                    <td>@doctor.LicenseNumber</td>
+                    <td>
+                        <form asp-action="RemoveDoctor" method="post" onsubmit="return confirm('Are you sure you want to remove this doctor? This action cannot be undone.');">
+                            <input type="hidden" name="id" value="@doctor.Id" />
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                <i class="fa-solid fa-trash"></i> Remove
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div> *@
+@model IEnumerable<ApplicationUser>
+
+<div class="container py-5">
+    <div class="row align-items-center mb-5">
+        <div class="col-md-8">
+            <h2 class="fw-bold text-dark display-6 mb-1">Active Medical Staff</h2>
+            <p class="text-muted mb-0">Manage and oversee all currently registered doctors in the system.</p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <div class="bg-primary bg-opacity-10 p-3 rounded-4 d-inline-flex align-items-center shadow-sm">
+                <i class="fa-solid fa-user-md fs-3 text-primary me-3"></i>
+                <div class="text-start">
+                    <span class="d-block fw-bold h4 mb-0 text-primary">@Model.Count()</span>
+                    <small class="text-muted text-uppercase fw-bold" style="font-size: 0.65rem;">Total Doctors</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success alert-modern d-flex align-items-center mb-4 p-3 shadow-sm">
+            <i class="fa-solid fa-check-circle me-3 fs-4"></i>
+            <div>@TempData["Message"]</div>
+        </div>
+    }
+
+    <div class="card doctors-card">
+        <div class="table-responsive">
+            <table class="table table-modern table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Full Name</th>
+                        <th>Specialization</th>
+                        <th>Email Address</th>
+                        <th>License Number</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var doctor in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle bg-light text-primary fw-bold me-3 d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px; border: 1px solid #e2e8f0;">
+                                        @doctor.FirstName[0]@doctor.LastName[0]
+                                    </div>
+                                    <div class="fw-bold text-dark">@doctor.FirstName @doctor.LastName</div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-info bg-opacity-10 text-info px-3 py-2 rounded-pill fw-bold" style="font-size: 0.8rem;">
+                                    <i class="fa-solid fa-stethoscope me-1"></i> @doctor.Specialization
+                                </span>
+                            </td>
+                            <td class="text-secondary small">
+                                <i class="fa-regular fa-envelope me-1"></i> @doctor.Email
+                            </td>
+                            <td>
+                                <code class="bg-light px-2 py-1 rounded text-dark fw-bold">#@doctor.LicenseNumber</code>
+                            </td>
+                            <td class="text-end pe-4">
+                                <form asp-action="RemoveDoctor" method="post" onsubmit="return confirm('Are you sure you want to remove Dr. @doctor.LastName?');">
+                                    <input type="hidden" name="id" value="@doctor.Id" />
+                                    <button type="submit" class="btn btn-outline-danger btn-remove btn-sm">
+                                        <i class="fa-solid fa-user-minus me-1"></i> Remove
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<style>
+    :root {
+        --med-primary: #0d6efd;
+        --med-danger: #dc3545;
+        --med-bg: #f8fafc;
+        --med-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Card & Table Container */
+    .doctors-card {
+        border: none !important;
+        border-radius: 16px !important;
+        background: #ffffff;
+        box-shadow: var(--med-shadow);
+        overflow: hidden;
+    }
+
+    /* Table Header Refinement */
+    .table-modern thead th {
+        background-color: #f1f5f9;
+        color: #475569;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 1rem 1.5rem;
+        border: none;
+    }
+
+    /* Row Hover Effects */
+    .table-modern tbody tr {
+        transition: all 0.2s ease;
+    }
+
+        .table-modern tbody tr:hover {
+            background-color: #f8fafc !important;
+            transform: scale(1.002);
+        }
+
+    .table-modern td {
+        padding: 1.25rem 1.5rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    /* Button & Alert Enhancements */
+    .btn-remove {
+        border-radius: 8px;
+        padding: 0.5rem 1.25rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .btn-remove:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+        }
+
+    .alert-modern {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+</style>

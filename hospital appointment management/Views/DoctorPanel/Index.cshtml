@@ -1,0 +1,243 @@
+﻿@* @model IEnumerable<hospital_appointment_management.Models.Appointment>
+@{
+    ViewData["Title"] = "Doctor Dashboard";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Welcome, Dr. @User.Identity.Name</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white shadow-sm">
+                <div class="card-body">
+                    <h5>Upcoming</h5>
+                    <h2 class="display-4">@ViewBag.TotalUpcoming</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white shadow-sm">
+                <div class="card-body">
+                    <h5>Completed Today</h5>
+                    <h2 class="display-4">@Model.Count(a => a.Status == AppointmentStatus.Completed)</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-danger text-white shadow-sm">
+                <div class="card-body">
+                    <h5>Cancelled</h5>
+                    <h2 class="display-4">@Model.Count(a => a.Status == AppointmentStatus.Cancelled)</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white font-weight-bold">Today's Schedule</div>
+                <div class="card-body">
+                    <a asp-action="Appointments" class="btn btn-outline-primary mb-3">View Full Patient List</a>
+                    <a asp-action="Availability" class="btn btn-outline-danger mb-3">Manage Availability</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white fw-bold">
+                <i class="bi bi-star-fill text-warning"></i> Recent Patient Feedback
+            </div>
+
+            <div class="card-body">
+                @if (ViewBag.Feedbacks != null && ((List<hospital_appointment_management.Models.Feedback>)ViewBag.Feedbacks).Any())
+                {
+                    <div class="row g-3">
+                        @foreach (var feedback in (List<hospital_appointment_management.Models.Feedback>)ViewBag.Feedbacks)
+                        {
+                            <div class="col-md-6">
+                                <div class="card h-100 border-0 shadow-sm feedback-card">
+                                    <div class="card-body">
+
+                                        <!-- Patient + Date -->
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar bg-primary text-white me-2">
+                                                    @feedback.Patient.FirstName[0]
+                                                </div>
+                                                <div>
+                                                    <strong>@feedback.Patient.FirstName @feedback.Patient.LastName</strong><br />
+                                                    <small class="text-muted">
+                                                        @feedback.CreatedDate.ToString("dd MMM yyyy")
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Rating -->
+                                        <div class="mb-2">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <i class="bi bi-star-fill @(i <= feedback.StarRating ? "text-warning" : "text-muted")"></i>
+                                            }
+                                        </div>
+
+                                        <!-- Comment -->
+                                        <p class="mb-0 text-muted fst-italic">
+                                            “@feedback.Comments”
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center mb-0">
+                        No feedback received yet.
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+ *@
+@model IEnumerable<hospital_appointment_management.Models.Appointment>
+@{
+    ViewData["Title"] = "Doctor Dashboard";
+}
+
+<div class="container py-5">
+    <div class="d-flex align-items-center justify-content-between mb-5">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">Welcome back, Dr. @User.Identity.Name</h2>
+            <p class="text-muted">Here is what is happening with your practice today.</p>
+        </div>
+        <div class="d-none d-md-block">
+            <span class="badge bg-light text-dark border px-3 py-2 rounded-pill">
+                <i class="bi bi-calendar3 me-2"></i>@DateTime.Now.ToString("dd MMM yyyy")
+            </span>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card stat-card shadow-sm text-white h-100" style="background: var(--primary-gradient);">
+                <div class="card-body d-flex flex-column justify-content-between p-4">
+                    <div>
+                        <h5>Upcoming</h5>
+                        <h2 class="display-5 fw-bold mb-0">@ViewBag.TotalUpcoming</h2>
+                    </div>
+                    <i class="bi bi-calendar-event opacity-25 position-absolute end-0 bottom-0 mb-3 me-3 fs-1"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card shadow-sm text-white h-100" style="background: var(--success-gradient);">
+                <div class="card-body d-flex flex-column justify-content-between p-4">
+                    <div>
+                        <h5>Completed Today</h5>
+                        <h2 class="display-5 fw-bold mb-0">
+                            @ViewBag.CompletedToday
+                        </h2>
+                    </div>
+                    <i class="bi bi-check-circle opacity-25 position-absolute end-0 bottom-0 mb-3 me-3 fs-1"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card shadow-sm text-white h-100" style="background: var(--danger-gradient);">
+                <div class="card-body d-flex flex-column justify-content-between p-4">
+                    <div>
+                        <h5>Cancelled</h5>
+                        <h2 class="display-5 fw-bold mb-0">
+                            @ViewBag.CancelledToday
+                        </h2>
+                    </div>
+                    <i class="bi bi-x-circle opacity-25 position-absolute end-0 bottom-0 mb-3 me-3 fs-1"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-white py-3 border-bottom-0">
+                    <h5 class="mb-0 fw-bold">Quick Management</h5>
+                </div>
+                <div class="card-body bg-light p-4">
+                    <div class="d-flex flex-wrap gap-3">
+                        <a asp-action="Appointments" class="btn btn-modern btn-primary shadow-sm">
+                            <i class="bi bi-people-fill me-2"></i>View Full Patient List
+                        </a>
+                        <a asp-action="Availability" class="btn btn-modern btn-outline-danger bg-white">
+                            <i class="bi bi-clock-history me-2"></i>Manage Availability
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold text-dark">
+                        <i class="bi bi-chat-left-heart text-primary me-2"></i>Recent Patient Feedback
+                    </h5>
+                    <span class="badge bg-soft-primary text-primary border-primary border px-3">@ViewBag.TotalReviews Reviews</span>
+                </div>
+
+                <div class="card-body p-4">
+                    @if (ViewBag.Feedbacks != null && ((List<hospital_appointment_management.Models.Feedback>)ViewBag.Feedbacks).Any())
+                    {
+                        <div class="row g-4">
+                            @foreach (var feedback in (List<hospital_appointment_management.Models.Feedback>)ViewBag.Feedbacks)
+                            {
+                                <div class="col-lg-6">
+                                    <div class="card h-100 border-0 bg-light feedback-card shadow-sm">
+                                        <div class="card-body p-4">
+                                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar bg-primary text-white shadow-sm me-3">
+                                                        @feedback.Patient.FirstName[0]
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-0 fw-bold text-dark">@feedback.Patient.FirstName @feedback.Patient.LastName</h6>
+                                                        <small class="text-muted"><i class="bi bi-calendar-check me-1"></i>@feedback.CreatedDate.ToString("dd MMM yyyy")</small>
+                                                    </div>
+                                                </div>
+                                                <div class="text-warning small">
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        <i class="bi bi-star-fill @(i <= feedback.StarRating ? "" : "text-secondary opacity-25")"></i>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <p class="mb-0 text-secondary fst-italic lh-base">
+                                                “@feedback.Comments”
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-chat-dots fs-1 text-muted opacity-25"></i>
+                            <p class="text-muted mt-3 mb-0">No patient feedback available at the moment.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

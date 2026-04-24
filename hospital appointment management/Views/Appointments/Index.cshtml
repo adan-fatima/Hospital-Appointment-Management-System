@@ -1,0 +1,161 @@
+﻿@* @model hospital_appointment_management.Models.BookingViewModel
+
+<div class="container mt-4">
+
+    <!-- HEADER -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <h3 class="fw-semibold mb-2">Select a Time Slot</h3>
+
+        <div class="d-flex gap-2">
+            <span class="badge bg-success px-3 py-2">Available</span>
+            <span class="badge bg-warning text-dark px-3 py-2">Booked</span>
+            <span class="badge bg-danger px-3 py-2">Blocked</span>
+        </div>
+    </div>
+
+    <div class="row flex-nowrap overflow-auto pb-4 g-3">
+
+        @foreach (var day in Model.WeeklySlots)
+        {
+            <div class="col-md-3 col-sm-4 col-8">
+                <div class="card border-0 shadow-sm h-100">
+
+                    <!-- DAY HEADER -->
+                    <div class="card-header text-center bg-white border-bottom">
+                        <div class="fw-bold text-primary">
+                            @day.Key.ToString("ddd")
+                        </div>
+                        <small class="text-muted">
+                            @day.Key.ToString("MMM dd")
+                        </small>
+                    </div>
+
+                    <!-- SLOTS -->
+                    <div class="card-body p-3">
+                        <div class="d-grid gap-2">
+
+                            @foreach (var slot in day.Value)
+                            {
+                                @if (slot.Status == "Green")
+                                {
+                                    <a asp-action="Book"
+                                       asp-route-doctorId="@Model.DoctorId"
+                                       asp-route-date="@day.Key.ToString("yyyy-MM-dd")"
+                                       asp-route-time="@slot.TimeString"
+                                       class="btn btn-outline-success btn-sm rounded-pill">
+                                        @slot.TimeString
+                                    </a>
+                                }
+                                else if (slot.Status == "Yellow")
+                                {
+                                    <button class="btn btn-warning btn-sm rounded-pill disabled"
+                                            style="opacity: 0.7;">
+                                        @slot.TimeString
+                                    </button>
+                                }
+                                else if (slot.Status == "Red")
+                                {
+                                    <button class="btn btn-danger btn-sm rounded-pill disabled"
+                                            style="opacity: 0.5;">
+                                        @slot.TimeString
+                                    </button>
+                                }
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+
+    </div>
+</div> *@
+@model hospital_appointment_management.Models.BookingViewModel
+
+<div class="container mt-5">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h3 class="fw-bold text-dark mb-1">Select a Time Slot</h3>
+            <p class="text-muted small mb-0">Choose a convenient time for your appointment.</p>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+            <span class="badge rounded-pill bg-white text-dark border px-3 py-2 shadow-sm">
+                <span class="dot bg-success me-2"></span>Available
+            </span>
+            <span class="badge rounded-pill bg-white text-dark border px-3 py-2 shadow-sm">
+                <span class="dot bg-warning me-2"></span>Booked
+            </span>
+            <span class="badge rounded-pill bg-white text-dark border px-3 py-2 shadow-sm">
+                <span class="dot bg-danger me-2"></span>Blocked
+            </span>
+        </div>
+    </div>
+
+    <div class="schedule-container row flex-nowrap overflow-auto pb-4 g-3 ms-0">
+
+        @foreach (var day in Model.WeeklySlots)
+        {
+            var isToday = day.Key.Date == DateTime.Today;
+
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-9 day-card">
+                <div class="card border-0 shadow-sm rounded-4 h-100 @(isToday ? "today-highlight" : "")">
+
+                    <div class="card-header day-header-gradient text-center py-3 border-0 rounded-top-4">
+                        <div class="fw-bold text-uppercase @(isToday ? "text-primary" : "text-secondary")" style="font-size: 0.8rem; letter-spacing: 1px;">
+                            @day.Key.ToString("ddd")
+                        </div>
+                        <div class="h5 fw-bold mb-0">
+                            @day.Key.ToString("MMM dd")
+                        </div>
+                    </div>
+
+                    <div class="card-body p-3">
+                        <div class="d-grid gap-2">
+
+                            @foreach (var slot in day.Value)
+                            {
+                                @if (slot.Status == "Green")
+                                {
+                                    <a asp-action="Book"
+                                       asp-route-doctorId="@Model.DoctorId"
+                                       asp-route-date="@day.Key.ToString("yyyy-MM-dd")"
+                                       asp-route-time="@slot.TimeString"
+                                       class="btn slot-btn slot-available rounded-3 py-2">
+                                        @slot.TimeString
+                                    </a>
+                                }
+                                else if (slot.Status == "Yellow")
+                                {
+                                    <button class="btn slot-btn slot-booked rounded-3 py-2 disabled">
+                                        @slot.TimeString
+                                    </button>
+                                }
+                                else if (slot.Status == "Red")
+                                {
+                                    <button class="btn slot-btn slot-blocked rounded-3 py-2 disabled">
+                                        @slot.TimeString
+                                    </button>
+                                }
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    /* Helper for Legend Dots */
+    .dot {
+        height: 8px;
+        width: 8px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+</style>

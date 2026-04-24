@@ -1,0 +1,165 @@
+﻿@* @model IEnumerable<hospital_appointment_management.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Admin Dashboard - Pending Approvals";
+}
+
+<div class="container mt-4">
+    <h2>Pending Doctor Approvals</h2>
+    <hr />
+
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["StatusMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">No pending approvals at this time.</div>
+    }
+    else
+    {
+        <table class="table table-hover border">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Specialization</th>
+                    <th>License Number</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var doctor in Model)
+                {
+                    <tr>
+                        <td>@doctor.FirstName @doctor.LastName</td>
+                        <td>@doctor.Email</td>
+                        <td>@doctor.Specialization</td>
+                        <td>@doctor.LicenseNumber</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <form asp-action="ApproveDoctor" method="post">
+                                    <input type="hidden" name="id" value="@doctor.Id" />
+                                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                </form>
+
+                                <form asp-action="DisapproveDoctor" method="post" onsubmit="return confirm('Are you sure you want to reject this doctor?');">
+                                    <input type="hidden" name="id" value="@doctor.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div> *@
+@model IEnumerable<hospital_appointment_management.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Admin Dashboard - Pending Approvals";
+}
+
+<div class="container py-5">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">Pending Doctor Approvals</h2>
+            <p class="text-muted mb-0">Review and verify medical credentials for new registrations.</p>
+        </div>
+        <div class="bg-primary bg-opacity-10 p-3 rounded-4 d-inline-flex align-items-center shadow-sm">
+            <i class="bi bi-people-fill text-primary fs-3 me-3"></i>
+            <div class="text-start">
+                <span class="d-block fw-bold h4 mb-0 text-primary">@Model.Count()</span>
+                <small class="text-muted text-uppercase fw-bold" style="font-size: 0.65rem;">Pending Requests</small>
+            </div>
+        </div>
+    </div>
+
+    <hr class="mb-4 opacity-10" />
+
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show animate-fade-in border-0 shadow-sm p-3 mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                <div>@TempData["StatusMessage"]</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card approval-card">
+        <div class="card-body p-0">
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5 animate-fade-in">
+                    <i class="bi bi-person-check text-muted opacity-25" style="font-size: 4rem;"></i>
+                    <h5 class="text-muted mt-3 fw-bold">All caught up! No pending approvals.</h5>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-modern align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">Doctor Details</th>
+                                <th>Specialization</th>
+                                <th>License Number</th>
+                                <th class="text-end pe-4">Verification Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var doctor in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4 py-3">
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center fw-bold text-primary me-3 shadow-sm" style="width: 45px; height: 45px; border: 1px solid #e2e8f0;">
+                                                @doctor.FirstName[0]@doctor.LastName[0]
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-dark">@doctor.FirstName @doctor.LastName</div>
+                                                <div class="text-muted small">@doctor.Email</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-soft-info px-3 py-2 rounded-pill fw-bold" style="font-size: 0.8rem;">
+                                            <i class="bi bi-stethoscope me-1"></i> @doctor.Specialization
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <code class="text-dark fw-bold bg-light px-2 py-1 rounded border">#@doctor.LicenseNumber</code>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <form asp-action="ApproveDoctor" method="post">
+                                                <input type="hidden" name="id" value="@doctor.Id" />
+                                                <button type="submit" class="btn btn-success btn-approval btn-sm shadow-sm">
+                                                    <i class="bi bi-check-lg"></i> Approve
+                                                </button>
+                                            </form>
+
+                                            <form asp-action="DisapproveDoctor" method="post" onsubmit="return confirm('Are you sure you want to reject Dr. @doctor.LastName?');">
+                                                <input type="hidden" name="id" value="@doctor.Id" />
+                                                <button type="submit" class="btn btn-outline-danger btn-approval btn-sm">
+                                                    <i class="bi bi-x-lg"></i> Reject
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

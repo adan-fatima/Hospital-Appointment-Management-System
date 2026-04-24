@@ -1,0 +1,42 @@
+﻿<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-header bg-success text-white text-center py-3">
+                    <h4>Confirm Your Appointment</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-calendar-check text-success" style="font-size: 3rem;"></i>
+                    </div>
+
+                    <ul class="list-group list-group-flush mb-4">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <strong>Doctor:</strong> <span>@ViewBag.DoctorName</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <strong>Specialty:</strong> <span>@ViewBag.Specialization</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <strong>Date:</strong> <span>@(((DateTime)ViewBag.Date).ToString("D"))</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <strong>Time:</strong> <span>@ViewBag.Time</span>
+                        </li>
+                    </ul>
+
+                    <form asp-action="ConfirmBooking" method="post">
+                        <input type="hidden" name="doctorId" value="@ViewBag.DoctorId" />
+                        <input type="hidden" name="date" value="@(((DateTime)ViewBag.Date).ToString("yyyy-MM-dd"))" />
+                        <input type="hidden" name="time" value="@ViewBag.Time" />
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">Confirm & Book Now</button>
+                            <a asp-action="Index" asp-route-doctorId="@ViewBag.DoctorId" class="btn btn-outline-secondary">Go Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
